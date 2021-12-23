@@ -19,6 +19,7 @@
     "electron-acrylic-window": "^0.5.11",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.0.1",
+    "filesize": "^8.0.6",
     "framer-motion": "^5.5.5",
     "notistack": "^2.0.3"
   },

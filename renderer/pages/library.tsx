@@ -5,8 +5,6 @@ import { Box, Grid } from "@mui/material";
 const LibraryPage = () => {
     const { games } = useLibrary();
 
-    console.log(games);
-
     return (
         <Box sx={{
             paddingTop: "28px"

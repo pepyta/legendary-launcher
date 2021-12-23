@@ -87,13 +87,79 @@ export interface IReleaseInfo {
     platform: string[];
 }
 
-class LegendaryLibraryHandler {
-    private cache: IGameData[] = null;
+export interface PlatformVersions {
+    Mac: string;
+    Windows: string;
+}
 
-    public async get(): Promise<IGameData[]> {
-        if(this.cache) {
+export interface Game {
+    app_name: string;
+    title: string;
+    version: string;
+    platform_versions: PlatformVersions;
+    cloud_saves_supported: boolean;
+    cloud_save_folder?: any;
+    cloud_save_folder_mac?: any;
+    is_dlc: boolean;
+    external_activation?: any;
+    launch_options: any[];
+    owned_dlc: any[];
+}
+
+export interface Manifest {
+    size: number;
+    type: string;
+    version: number;
+    feature_level: number;
+    app_name: string;
+    launch_exe: string;
+    launch_command: string;
+    build_version: string;
+    build_id: string;
+    prerequisites?: any;
+    install_tags: string[];
+    num_files: number;
+    num_chunks: number;
+    disk_size: number;
+    download_size: number;
+    tag_disk_size: any[];
+    tag_download_size: any[];
+}
+
+export interface IGameDetails {
+    game: Game;
+    manifest: Manifest;
+}
+
+class LegendaryLibraryHandler {
+    private cacheAllGames: IGameData[] = null;
+    private cacheGameDetails: Map<string, IGameDetails> = new Map(); 
+
+    public async get(appName: string): Promise<IGameDetails> {
+        if(this.cacheGameDetails.has(appName)) return this.cacheGameDetails.get(appName);
+
+        return new Promise((resolve, reject) => {
+            let data = "";
+
+            CommandHandler.send(`info ${appName} --json`, {
+                onData: (resp) => {
+                    if(resp.startsWith("[cli]") || resp.startsWith("[Core]")) return;
+                    data += resp;
+                },
+                onClose: () => {
+                    const parsed = JSON.parse(data);
+                    this.cacheGameDetails.set(appName, parsed);
+                    resolve(parsed);
+                },
+                onError: reject,
+            });
+        });
+    }
+
+    public async getAll(): Promise<IGameData[]> {
+        if(this.cacheAllGames) {
             console.log("from cache...");
-            return this.cache;
+            return this.cacheAllGames;
         };
 
         return new Promise((resolve, reject) => {
@@ -105,9 +171,8 @@ class LegendaryLibraryHandler {
                     data += resp
                 },
                 onClose: () => {
-                    console.log(data);
                     const parsed = JSON.parse(data);
-                    this.cache = parsed;
+                    this.cacheAllGames = parsed;
                     resolve(parsed);
                 },
                 onError: (err) => reject(err), 
