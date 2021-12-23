@@ -37,6 +37,7 @@ const SideNav = (props: SideNavProps) => {
                 flexShrink: 0,
                 '& .MuiDrawer-paper': {
                     width: DRAWER_WIDTH,
+                    background: "transparent",
                     boxSizing: 'border-box',
                 },
             }}
