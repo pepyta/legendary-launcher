@@ -1,6 +1,7 @@
+import AppBar from "@components/misc/AppBar";
 import SideNav from "@components/misc/SideNav";
 import LegendaryUser, { IUserData } from "@lib/legendary/LegendaryUser";
-import { AppBar, Grid, useTheme } from "@mui/material";
+import { Grid, useTheme } from "@mui/material";
 import { createContext, Dispatch, Fragment, PropsWithChildren, SetStateAction, useContext, useState } from "react";
 import AuthPage from "../../pages/auth";
 
@@ -28,7 +29,7 @@ const UserProvider = (props: UserProviderProps) => {
                         <Grid item>
                             <SideNav />
                         </Grid>
-                        <Grid item sx={{ flexGrow: 1, backgroundColor: theme.palette.background.default, minHeight: "100vh" }}>
+                        <Grid item sx={{ flexBasis: 1, flexGrow: 1, backgroundColor: theme.palette.background.default, minHeight: "100vh" }}>
                             {props.children}
                         </Grid>
                     </Grid>

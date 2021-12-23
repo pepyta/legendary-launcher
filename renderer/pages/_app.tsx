@@ -1,3 +1,4 @@
+import LibraryProvider from "@components/providers/LibraryProvider";
 import UserProvider from "@components/providers/UserProvider";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { AppProps } from "next/app";
@@ -17,7 +18,9 @@ const App = ({ Component, pageProps }: AppProps) => {
             <CssBaseline />
             <SnackbarProvider>
                 <UserProvider>
-                    <Component {...pageProps} />
+                    <LibraryProvider>
+                        <Component {...pageProps} />
+                    </LibraryProvider>
                 </UserProvider>
             </SnackbarProvider>
         </ThemeProvider>

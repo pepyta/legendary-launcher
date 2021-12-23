@@ -19,6 +19,7 @@ const AppBar = (props: BoxProps) => {
                 height: 28,
                 alignItems: "center",
                 backgroundColor: "transparent",
+                zIndex: 100000,
                 ...props.sx,
             }}
             className={"appbar"}

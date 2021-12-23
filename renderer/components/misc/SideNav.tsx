@@ -1,8 +1,8 @@
 import { useUser } from "@components/providers/UserProvider";
 import LegendaryUser from "@lib/legendary/LegendaryUser";
-import { AccountCircleRounded as UserIcon, LogoutRounded as LogoutIcon } from "@mui/icons-material";
+import { AccountCircleRounded as UserIcon, GamesRounded as GamesIcon, HomeRounded as HomeIcon, LogoutRounded as LogoutIcon } from "@mui/icons-material";
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
-import { Box } from "@mui/system";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 export type SideNavProps = {};
@@ -10,6 +10,7 @@ export type SideNavProps = {};
 const DRAWER_WIDTH = 300;
 
 const SideNav = (props: SideNavProps) => {
+    const router = useRouter();
     const { user, setUser } = useUser();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
@@ -57,6 +58,22 @@ const SideNav = (props: SideNavProps) => {
                         Logout
                     </MenuItem>
                 </Menu>
+                <ListItem button onClick={() => router.push("/home")}>
+                    <ListItemIcon>
+                        <HomeIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={"Home"}
+                    />
+                </ListItem>
+                <ListItem button onClick={() => router.push("/library")}>
+                    <ListItemIcon>
+                        <GamesIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={"Library"}
+                    />
+                </ListItem>
                 <ListItem button onClick={handleClick}>
                     <ListItemIcon>
                         <UserIcon />

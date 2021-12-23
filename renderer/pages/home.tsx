@@ -1,13 +1,9 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { Button } from '@mui/material';
-import CommandHandler from '@lib/CommandHandler';
-import LegendaryUser from '@lib/legendary/LegendaryUser';
 import AppBar from '@components/misc/AppBar';
-import SideNav from '@components/misc/SideNav';
 
-function Home() {
+function Home() { 
   return (
     <React.Fragment>
       <Head>
