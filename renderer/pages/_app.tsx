@@ -1,10 +1,12 @@
-import LibraryProvider from "@components/providers/LibraryProvider";
 import UserProvider from "@components/providers/UserProvider";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { AppProps } from "next/app";
-import Head from "next/head";
 import { SnackbarProvider } from "notistack";
-import "../public/css/global.css";
+import Head from "next/head";
+import { Provider } from "react-redux";
+import store from "../redux/store";
+import { useEffect } from "react";
+import LegendaryLibrary from "@lib/legendary/LegendaryLibrary";
 
 const theme = createTheme({
     palette: {
@@ -13,17 +15,24 @@ const theme = createTheme({
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
+    useEffect(() => {
+        LegendaryLibrary.getAll();
+    }, []);
+
     return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <SnackbarProvider>
-                <UserProvider>
-                    <LibraryProvider>
+        <Provider store={store}>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+                <Head>
+                    <link rel="stylesheet" href="/css/global.css" />
+                </Head>
+                <SnackbarProvider>
+                    <UserProvider>
                         <Component {...pageProps} />
-                    </LibraryProvider>
-                </UserProvider>
-            </SnackbarProvider>
-        </ThemeProvider>
+                    </UserProvider>
+                </SnackbarProvider>
+            </ThemeProvider>
+        </Provider>
     );
 };
 

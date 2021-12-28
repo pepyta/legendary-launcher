@@ -8,13 +8,6 @@ export type IUserData = {
     deviceId: string;
 };
 
-export type ILegendaryStatus = {
-    username: string;
-    games_available: number;
-    games_installed: number;
-    platform: string;
-};
-
 class LegendaryUserHandler {
     private userDataFilePath = `${LegendaryConstants.configFilePath}/user.json`;
 
@@ -59,5 +52,9 @@ class LegendaryUserHandler {
     }
 }
 
-const LegendaryUser = new LegendaryUserHandler();
+if(!global["LegendaryUser"]) {
+    global["LegendaryUser"] = new LegendaryUserHandler();
+}
+
+const LegendaryUser: LegendaryUserHandler = global["LegendaryUser"];
 export default LegendaryUser;

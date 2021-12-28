@@ -1,4 +1,4 @@
-import { exec, spawn } from 'child_process';
+import { ChildProcessWithoutNullStreams, exec, execSync, spawn } from 'child_process';
 import {
   screen,
   BrowserWindowConstructorOptions,
@@ -15,6 +15,27 @@ function isVibrancySupported() {
     parseInt(release().split('.')[0]) >= 10
   )
 }
+
+const onGoingSupprocesses: Map<number, ChildProcessWithoutNullStreams> = new Map();
+
+/**
+ * Get shell for different os
+ * @returns Windows: powershell
+ * @returns unix: $SHELL or /usr/bin/bash
+ */
+const getShell = () => {
+  // Dont change this logic since Heroic will break when using SH or FISH
+  switch (process.platform) {
+    case 'win32':
+      return 'powershell.exe'
+    case 'linux':
+      return '/bin/bash'
+    case 'darwin':
+      return '/bin/zsh'
+    default:
+      return '/bin/bash'
+  }
+};
 
 export default (windowName: string, options: BrowserWindowConstructorOptions): BrowserWindow => {
   const key = 'window-state';
@@ -103,18 +124,27 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
 
   setVibrancy(win, vibrancy);
 
+  ipcMain.on("kill-signal", (e, pid: number) => {
+    onGoingSupprocesses.get(pid)?.kill();
+  });
+
   ipcMain.on("command-handler", (event, id: string, args: string[], callbacks) => {
     const handlerChannel = `command-handler-response-${id}`;
-    console.log(`exec legendary ${args}...`);
+    console.log(`exec ${args}...`);
 
     const onCloseListener = () => event.reply(handlerChannel, "close");
     const onDataListener = (data) => event.reply(handlerChannel, "data", data.toString());
     const onErrorListener = (data) => event.reply(handlerChannel, "data", data.toString());
 
-    const instance = spawn("legendary", args);
+    const head = args.shift();
+    const instance = spawn(head, args);
+    onGoingSupprocesses.set(instance.pid, instance);
+
+    event.reply(handlerChannel, "pid", instance.pid);
 
     instance.on("close", () => {
       onCloseListener();
+      onGoingSupprocesses.delete(instance.pid);
       instance.removeAllListeners();
     });
 
@@ -122,6 +152,24 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     instance.stderr.on("data", onErrorListener);
     instance.stdout.on("error", onErrorListener);
     instance.stderr.on("error", onErrorListener);
+  });
+
+
+  ipcMain.on("command-handler-exec-sync", (event, cmd: string) => {
+    console.log(`[Command Handler] execAsync ${cmd}`);
+
+    const MAX_BUFFER = 25 * 1024 * 1024 // 25MB should be safe enough for big installations even on really slow internet
+
+    const execOptions = {
+      maxBuffer: MAX_BUFFER,
+      shell: getShell(),
+    }
+
+    try {
+      execSync(cmd, execOptions);
+    } catch(e) {
+      console.error(e);
+    }
   });
 
   ipcMain.on("maximize", () => win.maximize());
@@ -134,8 +182,6 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     win.on("maximize", () => e.reply("isMaximized-reply", win.isMaximized()));
     win.on("resize", () => e.reply("isMaximized-reply", win.isMaximized()));
   });
-
-
 
   win.on('close', saveState);
 

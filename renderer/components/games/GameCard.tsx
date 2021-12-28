@@ -1,38 +1,38 @@
 import LegendaryLibrary, { IGameData, IKeyImage } from "@lib/legendary/LegendaryLibrary";
-import { Card, CardActionArea, CardProps, Chip, CircularProgress, Dialog, DialogContent, DialogProps, DialogTitle, Grid, Paper, Skeleton, Typography, useTheme } from "@mui/material";
+import { Card, CardActionArea, CardProps, Chip, Dialog, DialogContent, DialogProps, Grid, Paper, Skeleton, Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
-import Image from "next/image";
 import VerticalCenter from "@components/misc/VerticalCenter";
-import { Fragment, useMemo, useState } from "react";
-import { BuildRounded, Inventory2Rounded as DownloadSizeIcon } from "@mui/icons-material";
-import LibraryProvider, { useLibrary } from "@components/providers/LibraryProvider";
-import fileSize from "filesize";
+import { Fragment, memo, useMemo, useState } from "react";
+
+import dynamic from "next/dynamic";
+import { GameElement } from "renderer/redux/library";
+
+const GameDialog = dynamic(() => import("@components/games/GameDialog"));
 
 export type GameCardProps = {
-    game: IGameData;
+    game: GameElement;
 } & CardProps;
 
 const GameCard = (props: GameCardProps) => {
-    const { setGameDetails, gameDetails } = useLibrary();
     const [open, setOpen] = useState(false);
 
     const [background, logo, badges] = useMemo(() => [
-        props.game.metadata.keyImages.find((e) => e.type === "DieselGameBoxTall"),
-        props.game.metadata.keyImages.find((e) => e.type === "DieselGameBoxLogo"),
+        props.game.overview.metadata.keyImages.find((e) => e.type === "DieselGameBoxTall"),
+        props.game.overview.metadata.keyImages.find((e) => e.type === "DieselGameBoxLogo"),
         (() => {
             const result: string[] = [];
 
-            if (props.game.metadata.customAttributes?.CanRunOffline?.value == "true") {
+            if (props.game.overview.metadata.customAttributes?.CanRunOffline?.value == "true") {
                 result.push("Can run offline");
             };
 
-            if (props.game.metadata.customAttributes.CloudSaveFolder) {
+            if (props.game.overview.metadata.customAttributes.CloudSaveFolder) {
                 result.push("Cloud save");
             }
 
             return result;
         })()
-    ], [props.game.metadata.keyImages]);
+    ], [props.game.overview.metadata.keyImages]);
 
     return (
         <Fragment>
@@ -43,19 +43,23 @@ const GameCard = (props: GameCardProps) => {
             />
             <Card
                 {...props}
+                style={{
+                    filter: !props.game.installation && "grayscale(1)",
+                }}
                 sx={{
                     position: "relative",
                     ...props.sx,
-                    aspectRatio: (3 / 4).toString(),
+                    aspectRatio: "0.75",
                 }}
             >
                 <CardActionArea
                     onClick={async () => {
                         setOpen(true);
-                        const resp = await LegendaryLibrary.get(props.game.app_name);
-                        const newMap = new Map(gameDetails);
-                        newMap.set(props.game.app_name, resp);
-                        setGameDetails(newMap);
+                        try {
+                            await LegendaryLibrary.getDetails(props.game.overview.app_name);
+                        } catch(e) {
+                            console.error(e);
+                        }
                     }}
                     sx={{
                         ":hover > .logo-box": {
@@ -63,12 +67,13 @@ const GameCard = (props: GameCardProps) => {
                         },
                         ":hover > .game-description": {
                             transform: "translateY(0)",
-                        },
+                        }, 
+                        height: "100%",
                     }}
                 >
                     <Background {...background} />
                     <Logo {...logo} />
-                    <InfoCard badges={badges} game={props.game} />
+                    <InfoCard badges={badges} game={props.game.overview} />
                 </CardActionArea>
             </Card>
         </Fragment>
@@ -76,11 +81,14 @@ const GameCard = (props: GameCardProps) => {
 };
 
 const Background = (props: IKeyImage) => (
-    <Image
-        src={props.url}
-        layout="responsive"
-        width={props.height * 3 / 4}
-        height={props.height}
+    <img
+        src={`${props?.url}?h=348&resize=1&w=261`}
+        style={{
+            maxWidth: "100%",
+            minWidth: "100%",
+            aspectRatio: "0.75",
+        }}
+        loading={"lazy"}
     />
 );
 
@@ -100,6 +108,7 @@ const Logo = (logo: IKeyImage) => (
             <VerticalCenter sx={{ p: 4 }}>
                 <img
                     src={logo.url}
+                    loading="lazy"
                     style={{
                         maxWidth: "100%"
                     }}
@@ -143,102 +152,4 @@ const InfoCard = (props: { game: IGameData, badges: string[] }) => (
     </Box>
 );
 
-const GameDialog = (props: DialogProps & { game: IGameData }) => {
-    const { gameDetails } = useLibrary();
-
-    const background = useMemo(() => props.game.metadata.keyImages.find((e) => e.type === "DieselGameBox"), [props.game.metadata.keyImages]);
-    const fallback = useMemo(() => props.game.metadata.keyImages.find((e) => e.type === "DieselGameBoxTall"), [props.game.metadata.keyImages]);
-
-    const details = gameDetails.get(props.game.app_name);
-
-    console.log(details);
-    console.log(props.game);
-
-    return (
-
-        <Dialog
-            fullWidth
-            maxWidth={"md"}
-            {...props}
-        >
-            <Grid container>
-                <Grid
-                    item
-                    sm={4}
-                    sx={{
-                        background: `url(${(background || fallback).url})`,
-                        backgroundSize: "cover",
-                        backgroundRepeat: "no-repeat",
-                    }}
-                />
-                <Grid item xs={12} sm={8}>
-                    <DialogContent>
-                        <Grid container spacing={1}>
-                            <Grid item xs={12}>
-                                <Typography variant={"h5"}>
-                                    {props.game.metadata.title}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography>
-                                    {props.game.app_name}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Grid container alignContent={"center"} spacing={1}>
-                                    <Grid item>
-                                        <BuildRounded fontSize={"small"} />
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography>
-                                            Developer: <b>{props.game.metadata.developer}</b>
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Grid container alignContent={"center"} spacing={1}>
-                                    <Grid item>
-                                        <DownloadSizeIcon fontSize={"small"} />
-                                    </Grid>
-                                    <Grid item sx={{ flexGrow: 1 }}>
-                                        <Typography sx={{ flexGrow: 1 }}>
-                                            {
-                                                details ? (
-                                                    `Download size: ${fileSize(details.manifest.download_size)}`
-                                                ) : (
-                                                    <Skeleton />
-                                                )
-                                            }
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            
-                            <Grid item xs={12}>
-                                <Grid container alignContent={"center"} spacing={1}>
-                                    <Grid item>
-                                        <DownloadSizeIcon fontSize={"small"} />
-                                    </Grid>
-                                    <Grid item sx={{ flexGrow: 1 }}>
-                                        <Typography >
-                                            {
-                                                details ? (
-                                                    `Disk space: ${fileSize(details.manifest.disk_size)}`
-                                                ) : (
-                                                    <Skeleton />
-                                                )
-                                            }
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                    </DialogContent>
-                </Grid>
-            </Grid>
-        </Dialog>
-    );
-};
-
-export default GameCard;
+export default memo(GameCard);
