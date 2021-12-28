@@ -1,10 +1,11 @@
 import HorizontalCenter from "@components/misc/HorizontalCenter";
+import Image from "@components/misc/Image";
 import VerticalCenter from "@components/misc/VerticalCenter";
 import DownloadManager from "@lib/legendary/DownloadManager";
 import LegendaryLibrary, { IGameData } from "@lib/legendary/LegendaryLibrary";
 import { BuildRounded as DeveloperIcon, DeleteRounded as DeleteIcon, InventoryRounded as SizeIcon, PlayArrowRounded as PlayIcon } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { Box, Button, Dialog, DialogContent, DialogProps, Grid, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogContent, DialogProps, Grid, Skeleton, Typography, useTheme } from "@mui/material";
 import fileSize from "filesize";
 import { useSnackbar } from "notistack";
 import { memo, useMemo, useState } from "react";
@@ -22,6 +23,7 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
         [props.game.overview.metadata.keyImages]
     );
 
+    const theme = useTheme();
     const details = useMemo(() => props.game.details, [props.game.details]);
     const { enqueueSnackbar } = useSnackbar();
     const [disabled, setDisabled] = useState(false);
@@ -75,23 +77,60 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
                     xs={12}
                     sx={{
                         height: 261,
-                        background: `url(${background.url}?h=348&resize=1&w=261)`,
-                        backgroundSize: "cover",
-                        backgroundRepeat: "no-repeat",
+                        position: "relative",
                     }}
-                />
+                >
+                    <Image
+                        src={background.url}
+                        height={261}
+                        style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            maxWidth: "100%",
+                            height: 261,
+                        }}
+                    />
+                    {
+                        logo && (
+                            <Image
+                                src={logo.url}
+                                style={{
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    bottom: 0,
+                                    right: 0,
+                                    marginLeft: "auto",
+                                    marginRight: "auto",
+                                    marginTop: "auto",
+                                    marginBottom: "auto",
+                                    maxWidth: "100%",
+                                    maxHeight: "50%",
+                                    padding: 24,
+                                }}
+                            />
+                        )
+                    }
+                    <Box
+                        sx={{
+                            width: "100%",
+                            height: 32,
+                            position: "absolute",
+                            bottom: 0,
+                            backgroundImage: `linear-gradient(transparent, rgba(255, 255, 255, 0.16)), linear-gradient(0, ${theme.palette.background.paper}, transparent)`,
+                        }}
+                    />
+                </Grid>
                 {/* TODO: add logo */}
                 <Grid item xs={12}>
                     <DialogContent>
-                        <Grid container spacing={1}>
+                        <Grid container spacing={2}>
                             <Grid item xs={12}>
                                 <Typography variant={"h5"}>
                                     {props.game.overview.metadata.title}
-                                </Typography>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Typography>
-                                    DEBUG: {props.game.overview.app_name}
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
@@ -102,43 +141,6 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
                                     <Grid item>
                                         <Typography>
                                             Developer: <b>{props.game.overview.metadata.developer}</b>
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Grid container alignContent={"center"} spacing={1}>
-                                    <Grid item>
-                                        <SizeIcon fontSize={"small"} />
-                                    </Grid>
-                                    <Grid item sx={{ flexGrow: 1 }}>
-                                        <Typography sx={{ flexGrow: 1 }}>
-                                            {
-                                                details ? (
-                                                    `Download size: ${fileSize(details.manifest.download_size)}`
-                                                ) : (
-                                                    <Skeleton />
-                                                )
-                                            }
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-
-                            <Grid item xs={12}>
-                                <Grid container alignContent={"center"} spacing={1}>
-                                    <Grid item>
-                                        <SizeIcon fontSize={"small"} />
-                                    </Grid>
-                                    <Grid item sx={{ flexGrow: 1 }}>
-                                        <Typography >
-                                            {
-                                                details ? (
-                                                    `Disk space: ${fileSize(details.manifest.disk_size)}`
-                                                ) : (
-                                                    <Skeleton />
-                                                )
-                                            }
                                         </Typography>
                                     </Grid>
                                 </Grid>

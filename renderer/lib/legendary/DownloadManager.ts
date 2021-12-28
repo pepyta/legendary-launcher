@@ -37,6 +37,16 @@ class DownloadManagerHandler {
         return;
     }
 
+    public async remove(app: IDownloadManagerElement) {
+        store.dispatch(remove(app));
+    }
+
+    public async resume() {
+        const state = store.getState();
+        if(state.downloadManager.queue.length === 0) throw new Error("No game in queue!");
+        await this.enqueue(state.downloadManager.queue[0]);
+    }
+
     public async next() {
         const ls = store.getState().downloadManager.queue;
         if(ls.length == 0) return;

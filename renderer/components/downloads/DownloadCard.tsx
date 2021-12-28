@@ -24,9 +24,6 @@ const DownloadCard = (props: DownloadCardProps) => {
                 open={open}
                 onClose={() => setOpen(false)}
             >
-                <DialogTitle>
-                    Download manager
-                </DialogTitle>
                 <DownloadInfo />
                 <DownloadQueue />
             </Dialog>

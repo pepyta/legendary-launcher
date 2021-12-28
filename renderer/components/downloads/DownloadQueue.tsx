@@ -1,55 +1,59 @@
-import { IKeyImage } from "@lib/legendary/LegendaryLibrary";
-import { DataGrid, GridRenderCellParams } from "@mui/x-data-grid";
+import Image from "@components/misc/Image";
+import DownloadManager from "@lib/legendary/DownloadManager";
+import { DeleteRounded as DeleteIcon, Download as DownloadIcon, PlayArrowRounded, RemoveRounded as RemoveIcon } from "@mui/icons-material";
+import { DialogContent, Grid, IconButton, Tooltip, Typography, useTheme } from "@mui/material";
 import { Fragment } from "react";
 import { useAppSelector } from "renderer/redux/hooks";
 
-const columns = [
-    {
-        field: "image",
-        headerName: "Image",
-        renderCell: (params: GridRenderCellParams<IKeyImage>) => (
-            <img
-                style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%",
-                }}
-                src={params.value.url}
-                loading="lazy"
-            />
-        ),
-    },
-    {
-        field: "name",
-        headerName: "Name",
-    },
-    {
-        field: "id",
-        headerName: "ID",
-    },
-];
-
 const DownloadQueue = () => {
-    const { queue } = useAppSelector(state => state.downloadManager);
+    const { queue, inProgress } = useAppSelector(state => state.downloadManager);
+    const theme = useTheme();
 
-    if(queue.length === 0) return (
+    if (queue.length === 0) return (
         <Fragment />
     );
 
     return (
-        <div style={{ height: 300, width: '100%' }}>
-            <DataGrid
-                rows={
-                    queue.map(({ app }) => {
-                        return {
-                            id: app.app_name,
-                            name: app.app_title,
-                            image: app.metadata.keyImages.find((el) => el.type == "DieselGameBoxTall"),
-                        };
-                    })
-                }
-                columns={columns}
-            />
-        </div>
+        <DialogContent>
+            <Grid container spacing={1}>
+                <Grid item xs={12}>
+                    <Typography variant={"body1"}>
+                        Download queue
+                    </Typography>
+                </Grid>
+                {queue.map((el) => (
+                    <Grid item xs={12}>
+                        <Grid container spacing={2} alignItems={"center"}>
+                            <Grid item xs={1}>
+                                <Image
+                                    src={el.app.metadata.keyImages.find((el) => el.type === "DieselGameBoxTall").url}
+                                    style={{
+                                        maxWidth: "100%",
+                                        boxShadow: theme.shadows[12],
+                                        borderRadius: theme.shape.borderRadius,
+                                    }}
+                                />
+                            </Grid>
+                            <Grid item xs={8}>
+                                {el.app.app_title}
+                            </Grid>
+                            <Grid item xs={3} textAlign={"right"}>
+                                <Tooltip title={"Download now"}>
+                                    <IconButton onClick={() => DownloadManager.enqueue(el)}>
+                                        <DownloadIcon />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip title={"Remove from queue"}>
+                                    <IconButton onClick={() => DownloadManager.remove(el)}>
+                                        <DeleteIcon />
+                                    </IconButton>
+                                </Tooltip>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                ))}
+            </Grid>
+        </DialogContent>
     );
 };
 

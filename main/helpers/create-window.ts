@@ -128,7 +128,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     onGoingSupprocesses.get(pid)?.kill();
   });
 
-  ipcMain.on("command-handler", (event, id: string, args: string[], callbacks) => {
+  ipcMain.on("command-handler", (event, id: string, args: string[]) => {
     const handlerChannel = `command-handler-response-${id}`;
     console.log(`exec ${args}...`);
 

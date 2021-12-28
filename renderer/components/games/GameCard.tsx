@@ -6,6 +6,7 @@ import { Fragment, memo, useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
 import { GameElement } from "renderer/redux/library";
+import Image from "@components/misc/Image";
 
 const GameDialog = dynamic(() => import("@components/games/GameDialog"));
 
@@ -81,14 +82,17 @@ const GameCard = (props: GameCardProps) => {
 };
 
 const Background = (props: IKeyImage) => (
-    <img
+    <Image
         src={`${props?.url}?h=348&resize=1&w=261`}
+        height={"100%"}
         style={{
-            maxWidth: "100%",
-            minWidth: "100%",
-            aspectRatio: "0.75",
+            position: "absolute",
+            height: "100%",
+            width: "auto",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
         }}
-        loading={"lazy"}
     />
 );
 
@@ -103,10 +107,12 @@ const Logo = (logo: IKeyImage) => (
                 left: 0,
                 right: 0,
                 bottom: 0,
+                maxWidth: "100%",
+                maxHeight: "100%",
             }}
         >
             <VerticalCenter sx={{ p: 4 }}>
-                <img
+                <Image
                     src={logo.url}
                     loading="lazy"
                     style={{
