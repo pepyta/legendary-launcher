@@ -1,8 +1,10 @@
+import HorizontalCenter from "@components/misc/HorizontalCenter";
+import VerticalCenter from "@components/misc/VerticalCenter";
 import DownloadManager from "@lib/legendary/DownloadManager";
 import LegendaryLibrary, { IGameData } from "@lib/legendary/LegendaryLibrary";
 import { BuildRounded as DeveloperIcon, DeleteRounded as DeleteIcon, InventoryRounded as SizeIcon, PlayArrowRounded as PlayIcon } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
-import { Button, Dialog, DialogContent, DialogProps, Grid, Skeleton, Typography } from "@mui/material";
+import { Box, Button, Dialog, DialogContent, DialogProps, Grid, Skeleton, Typography } from "@mui/material";
 import fileSize from "filesize";
 import { useSnackbar } from "notistack";
 import { memo, useMemo, useState } from "react";
@@ -14,6 +16,12 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
         || props.game.overview.metadata.keyImages.find((e) => e.type === "DieselGameBoxTall"),
         [props.game.overview.metadata.keyImages]
     );
+
+    const logo = useMemo(() =>
+        props.game.overview.metadata.keyImages.find((e) => e.type === "DieselGameBoxLogo"),
+        [props.game.overview.metadata.keyImages]
+    );
+
     const details = useMemo(() => props.game.details, [props.game.details]);
     const { enqueueSnackbar } = useSnackbar();
     const [disabled, setDisabled] = useState(false);
@@ -35,8 +43,8 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
         enqueueSnackbar(`Successfully uninstalled ${props.game.overview.app_title}!`, {
             variant: "success",
         });
-    
-        props?.onClose && props.onClose({}, "escapeKeyDown");    
+
+        props?.onClose && props.onClose({}, "escapeKeyDown");
         LegendaryLibrary.uninstall(props.game);
     };
 
@@ -47,29 +55,33 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
             appName: props.game.overview.app_name,
         });
 
-        setDisabled(false);
+        // disable this button until the game is most likely has been launched
+        setTimeout(() => {
+            setDisabled(false);
+        }, 10000);
     };
 
     return (
 
         <Dialog
             fullWidth
-            maxWidth={"md"}
+            maxWidth={"xs"}
             keepMounted={false}
             {...props}
         >
             <Grid container>
                 <Grid
                     item
-                    sm={4}
+                    xs={12}
                     sx={{
-                        // todo resize
-                        // background: `url(${background.url}?resize=1&width=400&height=${Math.floor(background.width / background.height * 400)})`,
+                        height: 261,
+                        background: `url(${background.url}?h=348&resize=1&w=261)`,
                         backgroundSize: "cover",
                         backgroundRepeat: "no-repeat",
                     }}
                 />
-                <Grid item xs={12} sm={8}>
+                {/* TODO: add logo */}
+                <Grid item xs={12}>
                     <DialogContent>
                         <Grid container spacing={1}>
                             <Grid item xs={12}>
