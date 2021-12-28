@@ -8,23 +8,19 @@ import { LoadingButton } from "@mui/lab";
 import { Box, Button, Dialog, DialogContent, DialogProps, Grid, Skeleton, Typography, useTheme } from "@mui/material";
 import fileSize from "filesize";
 import { useSnackbar } from "notistack";
-import { memo, useMemo, useState } from "react";
+import { Fragment, memo, useMemo, useState } from "react";
 import { GameElement } from "renderer/redux/library";
 
 const GameDialog = (props: DialogProps & { game: GameElement }) => {
-    const background = useMemo(() =>
-        props.game.overview.metadata.keyImages.find((e) => e.type === "DieselGameBox")
-        || props.game.overview.metadata.keyImages.find((e) => e.type === "DieselGameBoxTall"),
-        [props.game.overview.metadata.keyImages]
-    );
-
-    const logo = useMemo(() =>
-        props.game.overview.metadata.keyImages.find((e) => e.type === "DieselGameBoxLogo"),
-        [props.game.overview.metadata.keyImages]
+    const [background, logo] = useMemo(() =>
+        [
+            props.game?.overview.metadata.keyImages.find((e) => e.type === "DieselGameBox") || props.game?.overview.metadata.keyImages.find((e) => e.type === "DieselGameBoxTall"),
+            props.game?.overview.metadata.keyImages.find((e) => e.type === "DieselGameBoxLogo"),
+        ],
+        [props.game?.overview.metadata.keyImages]
     );
 
     const theme = useTheme();
-    const details = useMemo(() => props.game.details, [props.game.details]);
     const { enqueueSnackbar } = useSnackbar();
     const [disabled, setDisabled] = useState(false);
 
@@ -63,6 +59,8 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
         }, 10000);
     };
 
+    if(!props.game) return <Fragment />;
+
     return (
 
         <Dialog
@@ -81,22 +79,18 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
                     }}
                 >
                     <Image
-                        src={background.url}
+                        src={`${background.url}?resize=1&w=444`}
                         height={261}
                         style={{
-                            position: "absolute",
-                            top: 0,
-                            left: 0,
-                            right: 0,
-                            bottom: 0,
-                            maxWidth: "100%",
-                            height: 261,
+                            objectFit: "cover",
+                            width: "100%",
+                            height: "100%",
                         }}
                     />
                     {
                         logo && (
                             <Image
-                                src={logo.url}
+                                src={`${logo.url}?resize=1&w=320`}
                                 style={{
                                     position: "absolute",
                                     top: 0,

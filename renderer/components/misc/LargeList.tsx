@@ -1,5 +1,5 @@
 import { useSnackbar } from "notistack";
-import { Fragment, PropsWithChildren, useEffect, useMemo, useState } from "react";
+import { Fragment, memo, PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { enqueue } from "renderer/redux/download-manager";
 
 export type LargeListProps = {
@@ -36,4 +36,4 @@ const LargeList = (props: LargeListProps) => {
     );
 };
 
-export default LargeList;
+export default memo(LargeList);

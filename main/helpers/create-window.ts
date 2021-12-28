@@ -128,6 +128,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     onGoingSupprocesses.get(pid)?.kill();
   });
 
+  // todo: use prepacked legendary client
   ipcMain.on("command-handler", (event, id: string, args: string[]) => {
     const handlerChannel = `command-handler-response-${id}`;
     console.log(`exec ${args}...`);

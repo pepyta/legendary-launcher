@@ -1,4 +1,3 @@
-import { Skeleton } from "@mui/material";
 import { ComponentProps, Fragment, useState } from "react";
 
 export type ImageProps = ComponentProps<"img">;
