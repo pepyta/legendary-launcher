@@ -1,5 +1,7 @@
-import { Box, Grid, useTheme } from "@mui/material";
+import LargeList from "@components/misc/LargeList";
+import { Box, CircularProgress, Grid, Paper, Portal, useTheme } from "@mui/material";
 import dynamic from "next/dynamic";
+import { useMemo } from "react";
 import { useAppSelector } from "renderer/redux/hooks";
 
 const GameCard = dynamic(() => import("@components/games/GameCard"));
@@ -23,18 +25,20 @@ const LibraryPage = () => {
                     marginTop: "28px",
                 }}
             >
-                {([...(games || [])])
-                    .sort((a, b) => toInt(!!b.installation) - toInt(!!a.installation))
-                    .map((game) => (
-                        <Grid
-                            item
-                            xs={6} sm={4} md={3} lg={2}
-                            key={`game-card-${game.overview.metadata.id}`}
-                        >
-                            <GameCard game={game} />
-                        </Grid>
-                    ))
-                }
+                <LargeList>
+                    {([...(games || [])])
+                        .sort((a, b) => toInt(!!b.installation) - toInt(!!a.installation))
+                        .map((game) => (
+                            <Grid
+                                item
+                                xs={6} sm={4} md={3} lg={2}
+                                key={`game-card-${game.overview.metadata.id}`}
+                            >
+                                <GameCard game={game} />
+                            </Grid>
+                        ))
+                    }
+                </LargeList>
             </Grid>
         </Box>
     );
