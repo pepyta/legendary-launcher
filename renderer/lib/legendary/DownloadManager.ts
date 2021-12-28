@@ -1,4 +1,4 @@
-import { IDownloadManagerElement, onDisk, onNetwork, onProgress, next, enqueue, pause, remove } from "renderer/redux/download-manager";
+import { IDownloadManagerElement, onDisk, onNetwork, onProgress, enqueue, pause, remove } from "renderer/redux/download-manager";
 import store from "renderer/redux/store";
 import LegendaryLibrary from "./LegendaryLibrary";
 

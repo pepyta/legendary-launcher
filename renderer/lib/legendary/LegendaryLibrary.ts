@@ -168,7 +168,6 @@ export interface IGameInstallation {
 }
 
 class LegendaryLibraryHandler {
-    private cacheAllGames: IGameData[] = null;
     private cacheGameDetails: Map<string, IGameDetails> = new Map();
 
     /**
