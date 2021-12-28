@@ -1,3 +1,4 @@
+
 import UserProvider from "@components/providers/UserProvider";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { AppProps } from "next/app";

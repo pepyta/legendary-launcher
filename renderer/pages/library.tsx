@@ -26,7 +26,7 @@ const LibraryPage = () => {
                     .map((game) => (
                         <Grid
                             item
-                            xs={12} sm={6} md={4} lg={3}
+                            xs={6} sm={4} md={3} lg={2}
                             key={`game-card-${game.overview.metadata.id}`}
                         >
                             <GameCard game={game} />

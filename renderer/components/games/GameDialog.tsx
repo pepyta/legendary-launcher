@@ -68,7 +68,7 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
         <Dialog
             fullWidth
             maxWidth={"xs"}
-            keepMounted={false}
+            keepMounted
             {...props}
         >
             <Grid container>
@@ -108,8 +108,11 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
                                     marginTop: "auto",
                                     marginBottom: "auto",
                                     maxWidth: "100%",
-                                    maxHeight: "50%",
-                                    padding: 24,
+                                    maxHeight: "80%",
+                                    paddingLeft: 64,
+                                    paddingRight: 64,
+                                    paddingTop: 32,
+                                    paddingBottom: 32,
                                 }}
                             />
                         )
@@ -124,7 +127,6 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
                         }}
                     />
                 </Grid>
-                {/* TODO: add logo */}
                 <Grid item xs={12}>
                     <DialogContent>
                         <Grid container spacing={2}>

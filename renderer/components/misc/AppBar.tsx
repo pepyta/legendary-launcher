@@ -1,7 +1,6 @@
-import { Grid3x3, RemoveRounded } from "@mui/icons-material";
-import { Box, BoxProps, ButtonBase, ButtonBaseProps, Grid, GridProps, Paper } from "@mui/material";
+import { Box, BoxProps, Grid } from "@mui/material";
 import { ipcRenderer } from "electron";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const AppBar = (props: BoxProps) => {
     const [isMaximized, setIsMaximized] = useState(false);

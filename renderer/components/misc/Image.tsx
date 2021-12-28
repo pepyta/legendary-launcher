@@ -8,13 +8,6 @@ const Image = (props: ImageProps) => {
 
     return (
         <Fragment>
-            {!loaded && (
-                <Skeleton
-                    width={props.width}
-                    height={props.height}
-                    variant={"rectangular"}
-                />
-            )}
             <img
                 {...props}
                 loading={"lazy"}
