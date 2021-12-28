@@ -1,6 +1,8 @@
 import { Box, Grid, useTheme } from "@mui/material";
-import GameCard from "@components/games/GameCard";
+import dynamic from "next/dynamic";
 import { useAppSelector } from "renderer/redux/hooks";
+
+const GameCard = dynamic(() => import("@components/games/GameCard"));
 
 const toInt = (a: boolean): number => a ? 1 : 0
 

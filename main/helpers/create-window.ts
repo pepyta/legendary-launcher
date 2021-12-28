@@ -106,6 +106,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
       theme: 'dark',
       effect: 'acrylic',
       disableOnBlur: true,
+      useCustomWindowRefreshMethod: false,
     }
   }
 
@@ -117,7 +118,6 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
       contextIsolation: false,
       ...options.webPreferences,
     },
-    vibrancy,
   };
 
   win = new BrowserWindow(browserOptions);

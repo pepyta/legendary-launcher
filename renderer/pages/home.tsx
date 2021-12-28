@@ -1,27 +1,71 @@
-import React from 'react';
-import Head from 'next/head';
-import Link from 'next/link';
+import React, { Fragment } from 'react';
 import AppBar from '@components/misc/AppBar';
+import { Box, Card, CardContent, Container, Grid, Paper, Typography, useTheme } from '@mui/material';
+import { useUser } from '@components/providers/UserProvider';
+import { useAppSelector } from 'renderer/redux/hooks';
+import Image from '@components/misc/Image';
 
-function Home() { 
-  return (
-    <React.Fragment>
-      <Head>
-        <title>Home - Nextron (with-typescript)</title>
-      </Head>
-      <AppBar />
-      <div>
-        <p>
-          ⚡ Electron + Next.js ⚡ -
-          <Link href="/next">
-            <a>Go to next page</a>
-          </Link>
-        </p>
-        <img src="/images/logo.png" />
+const HomePage = () => {
+    const { user } = useUser();
+    const { games } = useAppSelector(({ library }) => library);
+    const theme = useTheme()
 
-      </div>
-    </React.Fragment>
-  );
+    return (
+        <Fragment>
+            <AppBar />
+            <Container maxWidth={"sm"}>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <Typography variant={"h6"}>
+                            Hello, {user.displayName}!
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardContent>
+                                TODO: Updater card
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Card>
+                            <CardContent>
+                                <Typography variant={"h5"} gutterBottom>
+                                    Quick launch
+                                </Typography>
+                                <Grid container spacing={1}>
+                                    {games?.filter((el) => !!el.installation).map((el) => (
+                                        <Grid item xs={2}>
+                                            <Paper
+                                                sx={{
+                                                    aspectRatio: "1",
+                                                    overflow: "hidden",
+                                                    transition: "all .5s ease-in-out",
+                                                    borderRadius: theme.shape.borderRadius,
+                                                    boxShadow: theme.shadows[4],
+                                                    "&:hover": {
+                                                        boxShadow: theme.shadows[8],
+                                                    },
+                                                }}
+                                            >
+                                                <Image
+                                                    src={el.overview.metadata.keyImages.find((el) => el.type === "DieselGameBoxTall").url}
+                                                    style={{
+                                                        maxWidth: "100%",
+                                                    }}
+                                                />
+                                            </Paper>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    
+                </Grid>
+            </Container>
+        </Fragment>
+    );
 };
 
-export default Home;
+export default HomePage;

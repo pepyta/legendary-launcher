@@ -15,6 +15,8 @@ class DownloadManagerHandler {
             onFinish: () => {
                 if(this.shouldStartNext) {
                     store.dispatch(remove(app));
+                    // todo: optimize to not rerender everything
+                    LegendaryLibrary.getAll();
                     this.next();
                 } else {
                     this.shouldStartNext = true;
