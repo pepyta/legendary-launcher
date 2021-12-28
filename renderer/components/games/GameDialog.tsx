@@ -1,9 +1,11 @@
 import DownloadManager from "@lib/legendary/DownloadManager";
 import LegendaryLibrary, { IGameData } from "@lib/legendary/LegendaryLibrary";
 import { BuildRounded as DeveloperIcon, DeleteRounded as DeleteIcon, InventoryRounded as SizeIcon, PlayArrowRounded as PlayIcon } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import { Button, Dialog, DialogContent, DialogProps, Grid, Skeleton, Typography } from "@mui/material";
 import fileSize from "filesize";
-import { memo, useMemo } from "react";
+import { useSnackbar } from "notistack";
+import { memo, useMemo, useState } from "react";
 import { GameElement } from "renderer/redux/library";
 
 const GameDialog = (props: DialogProps & { game: GameElement }) => {
@@ -13,24 +15,39 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
         [props.game.overview.metadata.keyImages]
     );
     const details = useMemo(() => props.game.details, [props.game.details]);
-
+    const { enqueueSnackbar } = useSnackbar();
+    const [disabled, setDisabled] = useState(false);
 
     const install = async () => {
         DownloadManager.enqueue({
             app: props.game.overview,
-            // todo: args
             args: {},
         });
+
+        enqueueSnackbar(`Successfully started to download ${props.game.overview.app_title}!`, {
+            variant: "success",
+        });
+
+        props?.onClose && props.onClose({}, "escapeKeyDown");
     };
 
     const uninstall = async () => {
+        enqueueSnackbar(`Successfully uninstalled ${props.game.overview.app_title}!`, {
+            variant: "success",
+        });
+    
+        props?.onClose && props.onClose({}, "escapeKeyDown");    
         LegendaryLibrary.uninstall(props.game);
     };
 
     const start = async () => {
-        LegendaryLibrary.launch({
+        setDisabled(true);
+
+        await LegendaryLibrary.launch({
             appName: props.game.overview.app_name,
         });
+
+        setDisabled(false);
     };
 
     return (
@@ -120,19 +137,22 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
                                 <Grid item xs={12}>
                                     <Grid container spacing={1}>
                                         <Grid item>
-                                            <Button
+                                            <LoadingButton
                                                 variant={"contained"}
                                                 size={"large"}
+                                                disabled={disabled}
+                                                loading={disabled}
                                                 startIcon={<PlayIcon />}
                                                 onClick={start}
                                             >
                                                 Start
-                                            </Button>
+                                            </LoadingButton>
                                         </Grid>
                                         <Grid item>
                                             <Button
                                                 size={"large"}
                                                 startIcon={<DeleteIcon />}
+                                                disabled={disabled}
                                                 onClick={uninstall}
                                             >
                                                 Uninstall

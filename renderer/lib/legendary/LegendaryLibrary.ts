@@ -1,6 +1,6 @@
 import CommandHandler from "@lib/CommandHandler";
 import { IDownloadManagerElement } from "renderer/redux/download-manager";
-import { GameElement, load, saveDetails, uninstall } from "renderer/redux/library";
+import { GameElement, load, uninstall } from "renderer/redux/library";
 import store from "renderer/redux/store";
 
 export interface IGameData {
@@ -298,8 +298,14 @@ class LegendaryLibraryHandler {
         return false;
     }
 
-    public launch({ appName }: { appName: string }) {
-        CommandHandler.execSync(`legendary launch ${appName}`);
+    public async launch({ appName }: { appName: string }) {
+        return new Promise((resolve, reject) => {
+            CommandHandler.send(`launch ${appName}`, {
+                onClose: () => resolve(null),
+                onError: reject,
+                onData: (data) => console.log(data),
+            });
+        });
     }
 
     public async uninstall(app: GameElement): Promise<void> {
