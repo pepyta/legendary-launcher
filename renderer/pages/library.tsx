@@ -1,4 +1,5 @@
 import GameDialog from "@components/games/GameDialog";
+import SearchBar from "@components/games/SearchBar";
 import LargeList from "@components/misc/LargeList";
 import { Box, CircularProgress, Grid, Paper, Portal, useTheme } from "@mui/material";
 import dynamic from "next/dynamic";
@@ -18,20 +19,20 @@ const LibraryPage = () => {
     const memoizedList = useMemo(
         () => (
             <LargeList key={"large-list-library"}>
-                    {([...(games || [])])
-                        .sort((a, b) => toInt(!!b.installation) - toInt(!!a.installation))
-                        .map((game) => (
-                            <Grid
-                                item
-                                xs={6} sm={4} md={3} lg={2}
-                                key={`game-card-${game.overview.metadata.id}`}
-                            >
-                                <GameCard game={game} onOpenDialog={() => setSelectedGame(game)} />
-                            </Grid>
-                        ))
-                    }
-                </LargeList>
-        ), 
+                {([...(games || [])])
+                    .sort((a, b) => toInt(!!b.installation) - toInt(!!a.installation))
+                    .map((game) => (
+                        <Grid
+                            item
+                            xs={6} sm={4} md={3} lg={2}
+                            key={`game-card-${game.overview.metadata.id}`}
+                        >
+                            <GameCard game={game} onOpenDialog={() => setSelectedGame(game)} />
+                        </Grid>
+                    ))
+                }
+            </LargeList>
+        ),
         [games]
     );
 
@@ -41,13 +42,18 @@ const LibraryPage = () => {
                 container
                 spacing={2}
                 sx={{
-                    p: 4,
+                    pr: 4,
+                    pl: 4,
+                    pb: 4,
                     maxHeight: "calc(100vh - 28px)",
                     overflowY: "scroll",
                     willChange: "transform",
                     marginTop: "28px",
                 }}
             >
+                <Grid item xs={12} textAlign={"center"}>    
+                    <SearchBar onSelect={setSelectedGame} />
+                </Grid>
                 <GameDialog
                     open={!!selectedGame}
                     onClose={() => setSelectedGame(null)}

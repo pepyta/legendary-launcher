@@ -13,6 +13,7 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@koale/useworker": "^4.0.2",
     "@mui/icons-material": "^5.2.5",
     "@mui/lab": "^5.0.0-alpha.61",
     "@mui/material": "^5.2.5",
@@ -22,13 +23,17 @@
     "electron-serve": "^1.1.0",
     "electron-store": "^8.0.1",
     "filesize": "^8.0.6",
+    "flexsearch": "^0.7.21",
     "framer-motion": "^5.5.5",
+    "fuse.js": "^6.5.3",
     "notistack": "^2.0.3",
+    "react-hotkeys-hook": "^3.4.4",
     "react-redux": "^7.2.6",
     "react-virtualized": "^9.22.3",
     "redux": "^4.1.2"
   },
   "devDependencies": {
+    "@types/flexsearch": "^0.7.2",
     "@types/node": "^14.14.31",
     "@types/react": "^16.9.49",
     "@types/react-redux": "^7.1.21",

@@ -13,6 +13,17 @@ const theme = createTheme({
     palette: {
         mode: "dark",
     },
+    components: {
+        MuiDialog: {
+            defaultProps: {
+                BackdropProps: {
+                    sx: {
+                        // backdropFilter: "blur(4px)",
+                    },
+                }
+            }
+        }
+    },
 });
 
 const App = ({ Component, pageProps }: AppProps) => {
