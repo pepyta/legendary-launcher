@@ -9,8 +9,7 @@ files:
     filter:
       - package.json
       - app
-snap:
-  publish:
-    provider: "github"
+linux:
+  target: "AppImage"
 publish:
   provider: "github"
