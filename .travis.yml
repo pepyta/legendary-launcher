@@ -1,0 +1,39 @@
+matrix:
+  include:
+    - os: osx
+      osx_image: xcode9.4
+      language: node_js
+      node_js: "16"
+      env:
+        - ELECTRON_CACHE=$HOME/.cache/electron
+        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+
+    - os: linux
+      services: docker
+      language: generic
+      
+    - os: windows
+      language: node_js
+      node_js: "16"
+      env:
+        - ELECTRON_CACHE=$HOME/.cache/electron
+        - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
+
+cache:
+  directories:
+    - node_modules
+    - $HOME/.cache/electron
+    - $HOME/.cache/electron-builder
+
+install:
+  - yarn install
+
+script:
+  - yarn release
+
+before_cache:
+  - rm -rf $HOME/.cache/electron-builder/wine
+
+branches:
+  except:
+    - "/^v\\d+\\.\\d+\\.\\d+$/"
