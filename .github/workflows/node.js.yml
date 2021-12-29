@@ -23,5 +23,9 @@ jobs:
       with:
         node-version: '16.x'
         cache: 'npm'
-    - run: yarn install
-    - run: yarn release
+    - name: Install dependencies with Yarn
+      run: yarn install
+    - name: Build and release binaries
+      run: yarn release
+      with:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
