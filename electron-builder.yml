@@ -9,5 +9,8 @@ files:
     filter:
       - package.json
       - app
+snap:
+  publish:
+    provider: "github"
 publish:
   provider: "github"
