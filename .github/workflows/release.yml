@@ -27,5 +27,5 @@ jobs:
       run: yarn install
     - name: Build and release binaries
       run: yarn release
-      with:
+      env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
