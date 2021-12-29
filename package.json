@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
-    "release": "nextron build --publish always",
+    "release": "nextron build --publish always -c.snap.publish=github",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
