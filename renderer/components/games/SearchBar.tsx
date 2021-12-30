@@ -79,7 +79,6 @@ const SearchBar = (props: SearchBarProps) => {
                 </Button>
             </Paper>
             <Dialog
-                keepMounted
                 maxWidth={"xs"}
                 fullWidth
                 open={open}
