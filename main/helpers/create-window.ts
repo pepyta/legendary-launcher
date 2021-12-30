@@ -108,6 +108,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
         effect: 'acrylic',
         disableOnBlur: true,
         useCustomWindowRefreshMethod: false,
+        maximumRefreshRate: 144,
       }
     }
 

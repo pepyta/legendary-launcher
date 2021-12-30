@@ -9,7 +9,7 @@ export type LargeListProps = {
 };
 
 const LargeList = (props: LargeListProps) => {
-    const iterationSize = useMemo(() => props.iterationSize || 12, [props.iterationSize]);
+    const iterationSize = useMemo(() => props.iterationSize || 24, [props.iterationSize]);
     const [state, setState] = useState<JSX.Element[]>(props.children.slice(0, iterationSize));
 
     useEffect(() => {

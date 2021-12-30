@@ -100,6 +100,7 @@ const WindowButton = (props: BoxProps) => {
                         alignContent: "center",
                         justifyContent: "center",
                         textAlign: "center",
+                        zIndex: 1400,
                         lineHeight: "28px",
                         "&:hover": {
                             backgroundColor: props.id === "close-button" ? "rgba(255, 0, 0, 0.8)" : theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.25)",

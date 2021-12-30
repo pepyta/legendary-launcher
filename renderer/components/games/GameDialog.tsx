@@ -111,15 +111,6 @@ const GameDialog = (props: DialogProps & { game: GameElement }) => {
                             />
                         )
                     }
-                    <Box
-                        sx={{
-                            width: "100%",
-                            height: 32,
-                            position: "absolute",
-                            bottom: 0,
-                            backgroundImage: `linear-gradient(transparent, rgba(255, 255, 255, 0.16)), linear-gradient(0, ${theme.palette.background.paper}, transparent)`,
-                        }}
-                    />
                 </Grid>
                 <Grid item xs={12}>
                     <DialogContent>
