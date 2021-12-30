@@ -1,6 +1,6 @@
 
 import UserProvider from "@components/providers/UserProvider";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, NoSsr } from "@mui/material";
 import { AppProps } from "next/app";
 import { SnackbarProvider } from "notistack";
 import Head from "next/head";
@@ -23,9 +23,11 @@ const App = ({ Component, pageProps }: AppProps) => {
                     <link rel="stylesheet" href="/css/global.css" />
                 </Head>
                 <SnackbarProvider>
-                    <UserProvider>
-                        <Component {...pageProps} />
-                    </UserProvider>
+                    <NoSsr>
+                        <UserProvider>
+                            <Component {...pageProps} />
+                        </UserProvider>
+                    </NoSsr>
                 </SnackbarProvider>
             </ThemeProvider>
         </Provider>
