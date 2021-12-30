@@ -1,4 +1,4 @@
-import { ChildProcessWithoutNullStreams, exec, execSync, spawn } from 'child_process';
+import { ChildProcessWithoutNullStreams, execSync, spawn } from 'child_process';
 import {
   screen,
   BrowserWindowConstructorOptions,
@@ -99,16 +99,20 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
 
   state = ensureVisibleOnSomeDisplay(restore());
 
-  let vibrancy: any = 'dark';
+  const generateVibrancy = (isDark: boolean) => {
+    let vibrancy: any = isDark ? 'dark' : 'light';
 
-  if (isVibrancySupported()) {
-    vibrancy = {
-      theme: 'dark',
-      effect: 'acrylic',
-      disableOnBlur: true,
-      useCustomWindowRefreshMethod: false,
+    if (isVibrancySupported()) {
+      vibrancy = {
+        theme: isDark ? 'dark' : 'light',
+        effect: 'acrylic',
+        disableOnBlur: true,
+        useCustomWindowRefreshMethod: false,
+      }
     }
-  }
+
+    return vibrancy;
+  };
 
   const browserOptions: BrowserWindowConstructorOptions = {
     ...options,
@@ -121,8 +125,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
   };
 
   win = new BrowserWindow(browserOptions);
-
-  setVibrancy(win, vibrancy);
+  setVibrancy(win, generateVibrancy(true));
 
   ipcMain.on("kill-signal", (e, pid: number) => {
     onGoingSupprocesses.get(pid)?.kill();
@@ -155,6 +158,9 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     instance.stderr.on("error", onErrorListener);
   });
 
+  ipcMain.on("set-theme", (e, isDarkMode: boolean) => {
+    setVibrancy(win, generateVibrancy(isDarkMode));
+  });
 
   ipcMain.on("command-handler-exec-sync", (event, cmd: string) => {
     console.log(`[Command Handler] execAsync ${cmd}`);

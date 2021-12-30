@@ -1,7 +1,7 @@
 import DownloadCard from "@components/downloads/DownloadCard";
 import { useUser } from "@components/providers/UserProvider";
 import LegendaryUser from "@lib/legendary/LegendaryUser";
-import { AccountCircleRounded as UserIcon, GamesRounded as GamesIcon, HomeRounded as HomeIcon, LogoutRounded as LogoutIcon } from "@mui/icons-material";
+import { AccountCircleRounded as UserIcon, GamesRounded as GamesIcon, HomeRounded as HomeIcon, LogoutRounded as LogoutIcon, SettingsRounded as SettingsIcon } from "@mui/icons-material";
 import { CSSObject, Drawer as MuiDrawer, List, ListItem, ListItemIcon, ListItemText, Menu, MenuItem, styled, Theme, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -114,6 +114,14 @@ const SideNav = (props: SideNavProps) => {
                     />
                 </ListItem>
                 <DownloadCard />
+                <ListItem button onClick={() => router.push("/settings")}>
+                    <ListItemIcon>
+                        <SettingsIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                        primary={"Settings"}
+                    />
+                </ListItem>
                 <ListItem
                     button
                     onClick={handleClick}

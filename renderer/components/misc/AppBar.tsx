@@ -1,4 +1,4 @@
-import { Box, BoxProps, Grid } from "@mui/material";
+import { Box, BoxProps, Grid, useTheme } from "@mui/material";
 import { ipcRenderer } from "electron";
 import { useEffect, useState } from "react";
 
@@ -81,25 +81,35 @@ const CloseIcon = () => (
 );
 
 
-const WindowButton = (props: BoxProps) => (
-    <Grid
-        item
-    >
-        <Box
-            {...props}
-            className={"window-button"}
-            sx={{
-                width: 45,
-                height: 28,
-                fill: "#fff",
-                alignContent: "center",
-                justifyContent: "center",
-                textAlign: "center",
-                lineHeight: "28px",
-                ...props.sx,
-            }}
-        />
-    </Grid>
-);
+const WindowButton = (props: BoxProps) => {
+    const theme = useTheme();
+
+    return (
+        (
+            <Grid
+                item
+            >
+                <Box
+                    {...props}
+                    className={"window-button"}
+                    sx={{
+                        transition: "all .1s ease-out",
+                        width: 45,
+                        height: 28,
+                        fill: theme.palette.getContrastText(theme.palette.background.default),
+                        alignContent: "center",
+                        justifyContent: "center",
+                        textAlign: "center",
+                        lineHeight: "28px",
+                        "&:hover": {
+                            backgroundColor: props.id === "close-button" ? "rgba(255, 0, 0, 0.8)" : theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.25)",
+                        },
+                        ...props.sx,
+                    }}
+                />
+            </Grid>
+        )
+    );
+};
 
 export default AppBar;

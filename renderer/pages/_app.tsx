@@ -1,6 +1,6 @@
 
 import UserProvider from "@components/providers/UserProvider";
-import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { AppProps } from "next/app";
 import { SnackbarProvider } from "notistack";
 import Head from "next/head";
@@ -8,23 +8,7 @@ import { Provider } from "react-redux";
 import store from "../redux/store";
 import { useEffect } from "react";
 import LegendaryLibrary from "@lib/legendary/LegendaryLibrary";
-
-const theme = createTheme({
-    palette: {
-        mode: "dark",
-    },
-    components: {
-        MuiDialog: {
-            defaultProps: {
-                BackdropProps: {
-                    sx: {
-                        // backdropFilter: "blur(4px)",
-                    },
-                }
-            }
-        }
-    },
-});
+import ThemeProvider from "@components/providers/ThemeProvider";
 
 const App = ({ Component, pageProps }: AppProps) => {
     useEffect(() => {
@@ -33,7 +17,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
     return (
         <Provider store={store}>
-            <ThemeProvider theme={theme}>
+            <ThemeProvider>
                 <CssBaseline />
                 <Head>
                     <link rel="stylesheet" href="/css/global.css" />

@@ -4,7 +4,11 @@ const store = new Store({
     schema: {
         "download-manager-list": {
             type: "array",
-        }
+        },
+        "dark-mode": {
+            type: "boolean",
+            default: true,
+        },
     }
 });
 
