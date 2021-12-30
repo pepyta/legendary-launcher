@@ -17,10 +17,6 @@ jobs:
         
     steps:
     - uses: actions/checkout@v2
-    - name: Delete drafts
-      uses: hugo19941994/delete-draft-releases@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Use Node.js 16.x
       uses: actions/setup-node@v2
       with:
@@ -28,6 +24,10 @@ jobs:
         cache: 'npm'
     - name: Install dependencies with Yarn
       run: yarn install
+    - name: Delete drafts
+      uses: hugo19941994/delete-draft-releases@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Build and release binaries
       run: yarn release
       env:
