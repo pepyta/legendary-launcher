@@ -8,7 +8,15 @@ on:
     branches: [ main ]
 
 jobs:
+  cleanup:
+    runs-on: ubuntu-latset
+    steps: 
+      - name: Delete drafts
+        uses: hugo19941994/delete-draft-releases@v1.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   release:
+    needs: cleanup
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
