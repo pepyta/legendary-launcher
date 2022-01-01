@@ -1,6 +1,6 @@
 import AppBar from "@components/misc/AppBar";
 import { LoadingButton } from "@mui/lab";
-import { Box, Button, Card, CardContent, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Grid, Typography, useTheme } from "@mui/material";
 import { ExitToAppRounded as LoginIcon } from "@mui/icons-material";
 import { Fragment, useState } from "react";
 import LegendaryUser from "@lib/legendary/LegendaryUser";
