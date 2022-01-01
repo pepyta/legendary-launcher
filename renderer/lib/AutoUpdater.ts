@@ -79,6 +79,7 @@ class AutoUpdater {
     public onError(listener: (error: Error) => void) {
         ipcRenderer.on("auto-updater", (e, cmd, args) => {
             if(cmd !== "error") return;
+            console.error(args[0]);
             listener(args[0]);
         });
     }
