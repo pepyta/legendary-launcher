@@ -52,7 +52,7 @@ export const downloadManagerSlice = createSlice({
         pause: (state) => {
             if(!state.inProgress) throw new Error("There is nothing to stop!");
             state.queue = [state.inProgress, ...state.queue];
-            ProgressBar.setValue(1);
+            ProgressBar.hide();
             state.disk = null;
             state.progress = null;
             state.network = null;
