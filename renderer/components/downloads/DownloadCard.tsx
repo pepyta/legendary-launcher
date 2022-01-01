@@ -8,6 +8,7 @@ export type DownloadCardProps = {};
 
 const DownloadCard = (props: DownloadCardProps) => {
     const [open, setOpen] = useState(false);
+    
     return (
         <Fragment>
             <ListItem button onClick={() => setOpen(true)}>

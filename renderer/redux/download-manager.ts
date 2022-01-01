@@ -1,4 +1,5 @@
 import { IGameData, InstallArgs } from "@lib/legendary/LegendaryLibrary";
+import ProgressBar from "@lib/ProgressBar";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface IDownloadManagerElement {
@@ -51,6 +52,7 @@ export const downloadManagerSlice = createSlice({
         pause: (state) => {
             if(!state.inProgress) throw new Error("There is nothing to stop!");
             state.queue = [state.inProgress, ...state.queue];
+            ProgressBar.setValue(1);
             state.disk = null;
             state.progress = null;
             state.network = null;
@@ -75,6 +77,7 @@ export const downloadManagerSlice = createSlice({
             state.network = action.payload;
         },
         onProgress: (state, action: PayloadAction<ProgressState>) => {
+            ProgressBar.setValue(action.payload.percent / 100);
             state.progress = action.payload;
         },
     },

@@ -2,7 +2,8 @@ import DownloadCard from "@components/downloads/DownloadCard";
 import { useUser } from "@components/providers/UserProvider";
 import LegendaryUser from "@lib/legendary/LegendaryUser";
 import { AccountCircleRounded as UserIcon, GamesRounded as GamesIcon, HomeRounded as HomeIcon, LogoutRounded as LogoutIcon, SettingsRounded as SettingsIcon } from "@mui/icons-material";
-import { CSSObject, Drawer as MuiDrawer, List, ListItem, ListItemIcon, ListItemText, Menu, MenuItem, styled, Theme, useMediaQuery } from "@mui/material";
+import { CSSObject, Drawer as MuiDrawer, List, ListItem, ListItemIcon, ListItemText, Menu, MenuItem, styled, Theme, useMediaQuery, useTheme } from "@mui/material";
+import { Box } from "@mui/system";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -50,9 +51,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const SideNav = (props: SideNavProps) => {
     const router = useRouter();
+
+    console.log(router.pathname);
+
     const { user, setUser } = useUser();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const theme = useTheme();
     const isOpen = useMediaQuery((theme: Theme) => theme.breakpoints.up('md'));
 
     const handleClick = (event) => {
@@ -72,6 +77,24 @@ const SideNav = (props: SideNavProps) => {
             console.error(e);
         }
     };
+
+    const entries = [
+        {
+            name: "Home",
+            link: "/home",
+            icon: <HomeIcon />
+        },
+        {
+            name: "Library",
+            link: "/library",
+            icon: <GamesIcon />
+        },
+        {
+            name: "Settings",
+            link: "/settings",
+            icon: <SettingsIcon />
+        },
+    ];
 
     return (
         <Drawer
@@ -97,31 +120,20 @@ const SideNav = (props: SideNavProps) => {
                         Logout
                     </MenuItem>
                 </Menu>
-                <ListItem button onClick={() => router.push("/home")}>
-                    <ListItemIcon>
-                        <HomeIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary={"Home"}
-                    />
-                </ListItem>
-                <ListItem button onClick={() => router.push("/library")}>
-                    <ListItemIcon>
-                        <GamesIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary={"Library"}
-                    />
-                </ListItem>
+                {entries.map((entry) => (
+                    <ListItem
+                        button
+                        onClick={() => router.push(entry.link)}
+                    >
+                        <ListItemIcon>
+                            {entry.icon}
+                        </ListItemIcon>
+                        <ListItemText
+                            primary={entry.name}
+                        />
+                    </ListItem>
+                ))}
                 <DownloadCard />
-                <ListItem button onClick={() => router.push("/settings")}>
-                    <ListItemIcon>
-                        <SettingsIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        primary={"Settings"}
-                    />
-                </ListItem>
                 <ListItem
                     button
                     onClick={handleClick}

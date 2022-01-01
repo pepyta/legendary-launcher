@@ -184,6 +184,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
   ipcMain.on("close", () => win.close());
   ipcMain.on("restore", () => win.restore());
   ipcMain.on("minimize", () => win.minimize());
+  ipcMain.on("set-progress-bar", (e, val) => win.setProgressBar(val));
 
   ipcMain.on("isMaximized", (e) => {
     e.reply("isMaximized-reply", win.isMaximized());
