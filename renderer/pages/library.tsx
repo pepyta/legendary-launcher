@@ -1,9 +1,8 @@
 import GameDialog from "@components/games/GameDialog";
 import SearchBar from "@components/games/SearchBar";
-import LargeList from "@components/misc/LargeList";
-import { Box, CircularProgress, Grid, Paper, Portal, useTheme } from "@mui/material";
+import { Box, Grid, useTheme } from "@mui/material";
 import dynamic from "next/dynamic";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { useAppSelector } from "renderer/redux/hooks";
 import { GameElement } from "renderer/redux/library";
 
@@ -18,7 +17,7 @@ const LibraryPage = () => {
 
     const memoizedList = useMemo(
         () => (
-            <LargeList key={"large-list-library"}>
+            <Fragment>
                 {([...(games || [])])
                     .sort((a, b) => toInt(!!b.installation) - toInt(!!a.installation))
                     .map((game) => (
@@ -31,7 +30,7 @@ const LibraryPage = () => {
                         </Grid>
                     ))
                 }
-            </LargeList>
+            </Fragment>
         ),
         [games]
     );
