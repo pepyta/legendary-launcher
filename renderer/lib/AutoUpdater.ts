@@ -9,6 +9,7 @@ class AutoUpdater {
             this.checkForUpdatesAndNotify();
         } else {
             console.log(process.env.NODE_ENV);
+            this.checkForUpdatesAndNotify();
             store.dispatch(
                 AutoUpdaterActions.setState({
                     state: "development-mode",
@@ -68,11 +69,11 @@ class AutoUpdater {
     }
 
     public checkForUpdatesAndNotify() {
-        ipcRenderer.send("check-for-updates-and-notify");
+        ipcRenderer.send("auto-updater", "check-for-updates-and-notify");
     }
 
     public quitAndInstall() {
-        ipcRenderer.send("quit-and-install");
+        ipcRenderer.send("auto-updater", "quit-and-install");
     }
 
     public onError(listener: (error: Error) => void) {

@@ -193,7 +193,16 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     win.on("resize", () => e.reply("isMaximized-reply", win.isMaximized()));
   });
 
-  autoUpdater.eventNames().forEach((eventName) => {
+  const events = [
+    "error",
+    "checking-for-update",
+    "update-available",
+    "update-not-available",
+    "download-progress",
+    "update-downloaded",
+  ];
+
+  events.forEach((eventName) => {
     autoUpdater.on(eventName, (...args) => {
       win.webContents.send("auto-updater", eventName.toString(), args);
     });
