@@ -21,6 +21,7 @@
     "@mui/x-data-grid": "^5.2.1",
     "@reduxjs/toolkit": "^1.7.1",
     "electron-acrylic-window": "^0.5.11",
+    "electron-is-packaged": "^1.0.2",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.0.1",
     "electron-updater": "^4.6.1",
