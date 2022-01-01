@@ -105,8 +105,14 @@ class AutoUpdater {
 
     public onDownloadProgress(listener: (progress: ProgressInfo, bytesPerSecond: number, percent: number, total: number, transferred: number) => void) {
         ipcRenderer.on("auto-updater", (e, cmd, args: [ProgressInfo, number, number, number, number]) => {
-            if(cmd !== "update-not-available") return;
+            if(cmd !== "download-progress") return;
             listener(...args);
+        });
+    }
+    public onUpdateDownloaded(listener: (info: UpdateInfo) => void) {
+        ipcRenderer.on("auto-updater", (e, cmd, args) => {
+            if(cmd !== "update-downloaded") return;
+            listener(args[0]);
         });
     }
 }

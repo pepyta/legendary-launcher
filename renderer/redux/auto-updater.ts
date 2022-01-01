@@ -22,6 +22,9 @@ type StateType = {
     percent: number;
     total: number;
     transferred: number;
+} | {
+    state: "update-downloaded";
+    info: UpdateInfo;
 };
 
 const initialState: { state: StateType } = {
