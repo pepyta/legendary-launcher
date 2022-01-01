@@ -6,6 +6,7 @@ import {
 } from 'electron';
 import { BrowserWindow, setVibrancy } from 'electron-acrylic-window';
 import Store from 'electron-store';
+import { autoUpdater } from 'electron-updater';
 import { release } from 'os';
 
 function isVibrancySupported() {
@@ -190,6 +191,26 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     e.reply("isMaximized-reply", win.isMaximized());
     win.on("maximize", () => e.reply("isMaximized-reply", win.isMaximized()));
     win.on("resize", () => e.reply("isMaximized-reply", win.isMaximized()));
+  });
+
+  autoUpdater.eventNames().forEach((eventName) => {
+    autoUpdater.on(eventName, (...args) => {
+      win.webContents.send("auto-updater", eventName.toString(), args);
+    });
+  });
+
+  ipcMain.on("auto-updater", (e, cmd: string, ...args) => {
+    switch(cmd) {
+      case "quit-and-install":
+        autoUpdater.quitAndInstall();
+        break;
+      case "check-for-updates-and-notify":
+        autoUpdater.checkForUpdatesAndNotify();
+        break;
+      default:
+        console.error("[AutoUpdater] No command found!");
+        break;
+    }
   });
 
   win.on('close', saveState);

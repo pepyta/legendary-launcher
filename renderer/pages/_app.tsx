@@ -7,6 +7,7 @@ import Head from "next/head";
 import { Provider } from "react-redux";
 import store from "../redux/store";
 import ThemeProvider from "@components/providers/ThemeProvider";
+import "@lib/AutoUpdater";
 
 const App = ({ Component, pageProps }: AppProps) => {
     return (

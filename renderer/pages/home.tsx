@@ -4,6 +4,7 @@ import { Box, Card, CardContent, Container, Grid, Paper, Typography, useTheme } 
 import { useUser } from '@components/providers/UserProvider';
 import { useAppSelector } from 'renderer/redux/hooks';
 import Image from '@components/misc/Image';
+import UpdaterCard from '@components/auto-updater/UpdaterCard';
 
 const HomePage = () => {
     const { user } = useUser();
@@ -21,11 +22,7 @@ const HomePage = () => {
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
-                        <Card>
-                            <CardContent>
-                                TODO: Updater card
-                            </CardContent>
-                        </Card>
+                        <UpdaterCard />
                     </Grid>
                     <Grid item xs={12}>
                         <Card>
@@ -35,7 +32,7 @@ const HomePage = () => {
                                 </Typography>
                                 <Grid container spacing={1}>
                                     {games?.filter((el) => !!el.installation).map((el) => (
-                                        <Grid item xs={2}>
+                                        <Grid item xs={2} key={`quick-launch-${el.overview.app_name}`}>
                                             <Paper
                                                 sx={{
                                                     aspectRatio: "1",
