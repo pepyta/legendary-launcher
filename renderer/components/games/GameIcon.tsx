@@ -1,10 +1,12 @@
 import Image from "@components/misc/Image";
-import { Box, BoxProps, useTheme } from "@mui/material";
+import { Box, BoxProps, CircularProgress, useTheme } from "@mui/material";
 import { memo, useMemo } from "react";
 import { GameElement } from "renderer/redux/library";
 
 export type GameIconProps = {
     game: GameElement;
+    loading?: boolean;
+    disabled?: boolean;
 } & BoxProps;
 
 const GameIcon = (props: GameIconProps) => {
@@ -12,9 +14,9 @@ const GameIcon = (props: GameIconProps) => {
     const logo = useMemo(
         () => (
             props.game.overview.metadata.keyImages.find((el) => el.type === "DieselGameBoxLogo") &&
-            <Logo url={props.game.overview.metadata.keyImages.find((el) => el.type === "DieselGameBoxLogo")?.url} />
+            <Logo url={props.game.overview.metadata.keyImages.find((el) => el.type === "DieselGameBoxLogo")?.url} disabled={props.disabled} />
         ),
-        [props.game]
+        [props.game, props.disabled]
     );
 
     const background = useMemo(
@@ -29,10 +31,12 @@ const GameIcon = (props: GameIconProps) => {
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
+                    transition: ".5s all ease-out",
+                    filter: (props.loading || props.disabled) && "grayscale(1) brightness(30%)",
                 }}
             />
         ),
-        [props.game],
+        [props.game, props.loading, props.disabled],
     );
     
     return (
@@ -48,12 +52,29 @@ const GameIcon = (props: GameIconProps) => {
             }}
         >
             {background}
-            {logo}
+            {props.loading ? (
+                <CircularProgress
+                    sx={{
+                        position: "absolute",
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        left: 0,
+                        top: 0,
+                        right: 0,
+                        p: 1,
+                        bottom: 0,
+                        marginTop: "auto",
+                        marginBottom: "auto",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                    }}
+                />
+            ) : logo}
         </Box>
     );
 };
 
-const Logo = (props: { url: string }) => (
+const Logo = (props: { url: string, disabled: boolean }) => (
     <Image
         src={props.url}
         style={{
@@ -67,10 +88,11 @@ const Logo = (props: { url: string }) => (
             bottom: 0,
             marginTop: "auto",
             marginBottom: "auto",
+            filter: props.disabled && "grayscale(1) brightness(30%)",
             marginLeft: "auto",
             marginRight: "auto",
         }}
     />
 );
 
-export default memo(GameIcon, (prev, props) => prev.game.overview.app_name === props.game.overview.app_name);
+export default memo(GameIcon);
