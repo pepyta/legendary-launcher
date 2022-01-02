@@ -10,20 +10,17 @@ files:
       - package.json
       - app
 win:
-  asarUnpack:
-    - bin/win32/legendary.exe
-  files:
-    - resources/bin/win32/*
+  extraResources:
+    - from: resources/bin/win32/*
+      to: bin/win32/legendary.exe
 linux:
   target: "AppImage"
-  asarUnpack:
-    - bin/linux/legendary
-  files:
-    - resources/bin/linux/*
+  extraResources:
+    - from: resources/bin/linux/*
+      to: bin/linux/legendary
 mac:
-  asarUnpack:
-    - bin/darwin/legendary
-  files:
-    - resources/bin/darwin/*
+  extraResources:
+    - from: resources/bin/darwin/*
+      to: bin/darwin/legendary
 publish:
   provider: "github"
