@@ -13,9 +13,7 @@ if (isProd) {
 
 (async () => {
   await app.whenReady();
-  if(!installer.isInstalled()) {
-    await installer.install();
-  }
+  await installer.init();
 
   const mainWindow = createWindow('main', {
     width: 1000,

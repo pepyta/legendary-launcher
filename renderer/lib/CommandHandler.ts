@@ -1,5 +1,5 @@
 import { ipcRenderer } from "electron";
-import LegendaryConstants from "./legendary/LegendaryConstants";
+import { platform } from "os";
 
 interface ICallbackList {
     onError?: (data: any) => void;
@@ -12,8 +12,7 @@ type ResponseType = "error" | "data" | "close" | "pid";
 const CommandHandler = {
     generateId: () => `${Math.random()}`,
     send: async (args: string, callbacks: ICallbackList) => {
-        console.log(LegendaryConstants.bin);
-        return await CommandHandler.dispatch(["{LegendaryBinaryLocation}", ...args.split(" ")], callbacks);
+        return await CommandHandler.dispatch([platform() === "win32" ? "legendary.exe" : "legendary", ...args.split(" ")], callbacks);
     },
     execSync: (cmd: string) => {
         ipcRenderer.send("command-handler-exec-sync", cmd);

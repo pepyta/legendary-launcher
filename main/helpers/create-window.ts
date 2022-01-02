@@ -140,12 +140,8 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
 
   // todo: use prepacked legendary client
   ipcMain.on("command-handler", (event, id: string, args: string[]) => {
+    installer.addToPath();
     const handlerChannel = `command-handler-response-${id}`;
-    if(args[0] === "{LegendaryBinaryLocation}") {
-      args[0] = installer.getBinaryPath();
-    }
-
-    //args[0] = `"${args[0]}"`;
 
     console.log(`exec ${args.join(" ")}...`);
 

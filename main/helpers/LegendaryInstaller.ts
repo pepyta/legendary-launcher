@@ -4,7 +4,7 @@ import { app } from "electron";
 import path from "path";
 import { platform } from "os";
 import unzip from "unzipper";
-import { execSync } from "child_process";
+import { exec, execSync } from "child_process";
 
 const links: {
     [key: string]: {
@@ -49,6 +49,19 @@ export class LegendaryInstaller {
         console.log(`[Legendary Installer] ${str}`);
     }
 
+    public addToPath() {
+        LegendaryInstaller.log("Setting path variable...");
+        if(platform() === "win32") {
+            execSync(`$env:Path += ";${app.getPath("userData")}"`, {
+                shell: "powershell.exe"
+            });
+        } else {
+            execSync(`PATH=$PATH:${app.getPath("userData")}"`, {
+                shell: "/bin/bash"
+            });
+        }
+    }
+
     private fixPermission() {
         if(platform() === "win32") return;
         LegendaryInstaller.log(`Fixing permission for "${this.getBinaryPath()}"`);
@@ -89,7 +102,7 @@ export class LegendaryInstaller {
         });
     }
 
-    public isInstalled() {
+    private isInstalled() {
         return fs.existsSync(path.join(app.getPath("userData"), this.link.dest.extracted));
     }
 
@@ -127,7 +140,15 @@ export class LegendaryInstaller {
         });
     }
 
-    public async install() {
+    public async init() {
+        if(!this.isInstalled()) {
+            await this.install();
+        }
+        
+        this.addToPath();
+    }
+
+    private async install() {
         await this.download();
         if (this.link.unzip) await this.unzip();
         return;
