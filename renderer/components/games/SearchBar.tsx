@@ -7,6 +7,7 @@ import { GameElement } from "renderer/redux/library";
 import Image from "@components/misc/Image";
 import KeyboardShortcut from "@components/misc/KeyboardShortcut";
 import { useHotkeys } from "react-hotkeys-hook";
+import GameIcon from "./GameIcon";
 
 export type SearchBarProps = {
     onSelect: (game: GameElement) => void;
@@ -127,13 +128,8 @@ const SearchBar = (props: SearchBarProps) => {
                                         borderRadius: theme.shape.borderRadius,
                                         mr: 2,
                                     }}>
-                                        <Image
-                                            src={el.overview.metadata.keyImages.find((el) => el.type === "DieselGameBoxTall")?.url}
-                                            width={64}
-                                            height={64}
-                                            style={{
-                                                objectFit: "cover",
-                                            }}
+                                        <GameIcon
+                                            game={el}
                                         />
                                     </ListItemAvatar>
                                     <ListItemText

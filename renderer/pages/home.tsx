@@ -5,6 +5,7 @@ import { useUser } from '@components/providers/UserProvider';
 import { useAppSelector } from 'renderer/redux/hooks';
 import Image from '@components/misc/Image';
 import UpdaterCard from '@components/auto-updater/UpdaterCard';
+import GameIcon from '@components/games/GameIcon';
 
 const HomePage = () => {
     const { user } = useUser();
@@ -30,25 +31,9 @@ const HomePage = () => {
                                 <Grid container spacing={1}>
                                     {games?.filter((el) => !!el.installation).map((el) => (
                                         <Grid item xs={2} key={`quick-launch-${el.overview.app_name}`}>
-                                            <Paper
-                                                sx={{
-                                                    aspectRatio: "1",
-                                                    overflow: "hidden",
-                                                    transition: "all .5s ease-in-out",
-                                                    borderRadius: theme.shape.borderRadius,
-                                                    boxShadow: theme.shadows[4],
-                                                    "&:hover": {
-                                                        boxShadow: theme.shadows[8],
-                                                    },
-                                                }}
-                                            >
-                                                <Image
-                                                    src={el.overview.metadata.keyImages.find((el) => el.type === "DieselGameBoxTall").url}
-                                                    style={{
-                                                        maxWidth: "100%",
-                                                    }}
-                                                />
-                                            </Paper>
+                                            <GameIcon
+                                                game={el}
+                                            />
                                         </Grid>
                                     ))}
                                 </Grid>
