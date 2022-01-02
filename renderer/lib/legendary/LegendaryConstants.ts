@@ -5,14 +5,22 @@ import { isPackaged } from 'electron-is-packaged';
 const isProd = process.env.NODE_ENV === "production";
 const isWindows = platform() === "win32";
 const getLegendaryBin = () => {
+    const fixAsar = (str: string) => {
+        if(!str.includes("app.asar.unpacked")) {
+            return str.replace("app.asar", "app.asar.unpacked");
+        }
+
+        return str;
+    };
+
     const binariesPath =
         isProd && isPackaged // the path to a bundled electron app.
-            ? path.join(process.resourcesPath, '/bin', platform())
-            : path.join(process.cwd(), '/resources', '/bin', platform());
+            ? path.join(process.resourcesPath, '/app.asar.unpacked', '/app', '/bin', platform())
+            : path.join(process.cwd(), '/renderer', '/public', '/bin', platform());
 
-    return path.resolve(
+    return fixAsar(path.resolve(
         path.join(binariesPath, isWindows ? "/legendary.exe" : "/legendary")
-    );
+    ));
 }
 
 const LegendaryConstants = {

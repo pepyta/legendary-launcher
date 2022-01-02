@@ -1,4 +1,4 @@
-appId: com.pepyta.legendary
+appId: dev.pepyta.legendary
 productName: Legendary Launcher
 copyright: Copyright © 2021 Gál Péter
 directories:
@@ -9,18 +9,22 @@ files:
     filter:
       - package.json
       - app
+      - "!app/bin/*"
 win:
-  extraFiles:
-    - from: resources/bin/win32
-      to: bin/win32
+  asarUnpack:
+    - app/bin/win32/legendary.exe
+  files:
+    - app/bin/win32/*
 linux:
   target: "AppImage"
-  extraFiles:
-    - from: resources/bin/linux
-      to: bin/linux
+  asarUnpack:
+    - app/bin/linux/legendary
+  files:
+    - app/bin/linux/*
 mac:
-  extraFiles:
-    - from: resources/bin/darwin
-      to: bin/darwin
+  asarUnpack:
+    - app/bin/darwin/legendary
+  files:
+    - app/bin/darwin/*
 publish:
   provider: "github"
