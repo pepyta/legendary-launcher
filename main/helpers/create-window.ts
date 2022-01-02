@@ -1,10 +1,11 @@
 import { ChildProcessWithoutNullStreams, execSync, spawn } from 'child_process';
 import {
   screen,
+  BrowserWindow,
   BrowserWindowConstructorOptions,
   ipcMain,
 } from 'electron';
-import { BrowserWindow, setVibrancy } from 'electron-acrylic-window';
+import { BrowserWindow as BrowserWindowCustom, setVibrancy } from 'electron-acrylic-window';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import { release } from 'os';
@@ -47,7 +48,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     height: options.height,
   };
   let state = {};
-  let win: BrowserWindow;
+  let win: BrowserWindow | BrowserWindowCustom;
 
   const restore = () => store.get(key, defaultSize);
 
@@ -126,8 +127,10 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     },
   };
 
-  win = new BrowserWindow(browserOptions);
-  setVibrancy(win, generateVibrancy(true));
+  win = isVibrancySupported() ? new BrowserWindowCustom(browserOptions) : new BrowserWindow(browserOptions);
+  if(win instanceof BrowserWindowCustom) {
+    setVibrancy(win, generateVibrancy(true));
+  }
 
   ipcMain.on("kill-signal", (e, pid: number) => {
     onGoingSupprocesses.get(pid)?.kill();
@@ -161,7 +164,9 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
   });
 
   ipcMain.on("set-theme", (e, isDarkMode: boolean) => {
-    setVibrancy(win, generateVibrancy(isDarkMode));
+    if(win instanceof BrowserWindowCustom) {
+      setVibrancy(win, generateVibrancy(isDarkMode));
+    }
   });
 
   ipcMain.on("command-handler-exec-sync", (event, cmd: string) => {
