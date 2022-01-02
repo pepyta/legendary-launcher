@@ -56,7 +56,7 @@ export class LegendaryInstaller {
                 shell: "powershell.exe"
             });
         } else {
-            execSync(`PATH=$PATH:${app.getPath("userData")}"`, {
+            execSync(`PATH="$PATH:${app.getPath("userData")}"`, {
                 shell: "/bin/bash"
             });
         }
