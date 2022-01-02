@@ -27,13 +27,15 @@
     "electron-updater": "^4.6.1",
     "filesize": "^8.0.6",
     "flexsearch": "^0.7.21",
+    "follow-redirects": "^1.14.6",
     "framer-motion": "^5.5.5",
     "fuse.js": "^6.5.3",
     "notistack": "^2.0.3",
     "react-hotkeys-hook": "^3.4.4",
     "react-redux": "^7.2.6",
     "react-virtualized": "^9.22.3",
-    "redux": "^4.1.2"
+    "redux": "^4.1.2",
+    "unzipper": "^0.10.11"
   },
   "devDependencies": {
     "@types/flexsearch": "^0.7.2",
@@ -41,6 +43,7 @@
     "@types/react": "^16.9.49",
     "@types/react-redux": "^7.1.21",
     "@types/react-virtualized": "^9.21.16",
+    "@types/unzipper": "^0.10.5",
     "electron": "^15.0.0",
     "electron-builder": "^22.14.5",
     "next": "^11.1.2",

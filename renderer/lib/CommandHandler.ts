@@ -13,7 +13,7 @@ const CommandHandler = {
     generateId: () => `${Math.random()}`,
     send: async (args: string, callbacks: ICallbackList) => {
         console.log(LegendaryConstants.bin);
-        return await CommandHandler.dispatch([LegendaryConstants.bin, ...args.split(" ")], callbacks);
+        return await CommandHandler.dispatch(["{LegendaryBinaryLocation}", ...args.split(" ")], callbacks);
     },
     execSync: (cmd: string) => {
         ipcRenderer.send("command-handler-exec-sync", cmd);

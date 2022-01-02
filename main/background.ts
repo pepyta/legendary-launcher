@@ -1,6 +1,7 @@
 import { app } from 'electron';
 import serve from 'electron-serve';
 import { createWindow } from './helpers';
+import installer from './helpers/LegendaryInstaller';
 
 const isProd: boolean = process.env.NODE_ENV === 'production';
 
@@ -12,6 +13,9 @@ if (isProd) {
 
 (async () => {
   await app.whenReady();
+  if(!installer.isInstalled()) {
+    await installer.install();
+  }
 
   const mainWindow = createWindow('main', {
     width: 1000,

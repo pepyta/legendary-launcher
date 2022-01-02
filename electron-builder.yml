@@ -9,22 +9,7 @@ files:
     filter:
       - package.json
       - app
-      - "!app/bin/*"
-win:
-  asarUnpack:
-    - app/bin/win32/legendary.exe
-  files:
-    - app/bin/win32/*
 linux:
   target: "AppImage"
-  asarUnpack:
-    - app/bin/linux/legendary
-  files:
-    - app/bin/linux/*
-mac:
-  asarUnpack:
-    - app/bin/darwin/legendary
-  files:
-    - app/bin/darwin/*
 publish:
   provider: "github"

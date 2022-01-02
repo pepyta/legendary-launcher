@@ -8,6 +8,7 @@ import {
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import { release } from 'os';
+import installer from './LegendaryInstaller';
 
 function isVibrancySupported() {
   // Windows 10 or greater
@@ -140,14 +141,20 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
   // todo: use prepacked legendary client
   ipcMain.on("command-handler", (event, id: string, args: string[]) => {
     const handlerChannel = `command-handler-response-${id}`;
-    console.log(`exec ${args}...`);
+    if(args[0] === "{LegendaryBinaryLocation}") {
+      args[0] = installer.getBinaryPath();
+    }
+
+    //args[0] = `"${args[0]}"`;
+
+    console.log(`exec ${args.join(" ")}...`);
 
     const onCloseListener = () => event.reply(handlerChannel, "close");
     const onDataListener = (data) => event.reply(handlerChannel, "data", data.toString());
     const onErrorListener = (data) => event.reply(handlerChannel, "data", data.toString());
 
     const head = args.shift();
-    const instance = spawn(head, args);
+    const instance = spawn(head, args, { shell: true });
     onGoingSupprocesses.set(instance.pid, instance);
 
     event.reply(handlerChannel, "pid", instance.pid);
