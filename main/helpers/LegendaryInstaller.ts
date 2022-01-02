@@ -49,6 +49,12 @@ export class LegendaryInstaller {
         console.log(`[Legendary Installer] ${str}`);
     }
 
+    private fixPermission() {
+        if(platform() === "win32") return;
+        LegendaryInstaller.log(`Fixing permission for "${this.getBinaryPath()}"`);
+        execSync(`chmod +x ${this.getBinaryPath()}`);
+    }
+
     private async download() {
         const path = this.getDownloadPath();
         const file = fs.createWriteStream(path);
@@ -67,9 +73,7 @@ export class LegendaryInstaller {
             // The destination stream is ended by the time it's called
             file.on('finish', () => {
                 LegendaryInstaller.log(`Download finished! (path: ${path})`);
-                if(platform() === "darwin" || platform() === "linux") {
-                    execSync(`chmod +x ${this.link.dest.extracted}`);
-                }
+                this.fixPermission();
                 resolve(null);
             });
 
@@ -115,9 +119,7 @@ export class LegendaryInstaller {
                 }))
                 .on("close", () => {
                     LegendaryInstaller.log(`Unzipping finished!`);
-                    if(platform() === "darwin" || platform() === "linux") {
-                        execSync(`chmod +x ${this.link.dest.extracted}`);
-                    }
+                    this.fixPermission();
                     fs.unlinkSync(this.getDownloadPath());
                     resolve(null);
                 })
