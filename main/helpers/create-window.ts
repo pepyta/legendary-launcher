@@ -5,7 +5,6 @@ import {
   BrowserWindowConstructorOptions,
   ipcMain,
 } from 'electron';
-import { BrowserWindow as BrowserWindowCustom, setVibrancy } from 'electron-acrylic-window';
 import Store from 'electron-store';
 import { autoUpdater } from 'electron-updater';
 import { release } from 'os';
@@ -48,7 +47,7 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     height: options.height,
   };
   let state = {};
-  let win: BrowserWindow | BrowserWindowCustom;
+  let win: BrowserWindow;
 
   const restore = () => store.get(key, defaultSize);
 
@@ -127,9 +126,11 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     },
   };
 
-  win = isVibrancySupported() ? new BrowserWindowCustom(browserOptions) : new BrowserWindow(browserOptions);
-  if(win instanceof BrowserWindowCustom) {
-    setVibrancy(win, generateVibrancy(true));
+  win = isVibrancySupported() ? new (require('electron-acrylic-window'))["BrowserWindow"](browserOptions) : new BrowserWindow(browserOptions);
+  if(isVibrancySupported()) {
+    (require('electron-acrylic-window'))["setVibrancy"](win, generateVibrancy(true));
+  } else {
+    win.setVibrancy("dark");
   }
 
   ipcMain.on("kill-signal", (e, pid: number) => {
@@ -164,8 +165,10 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
   });
 
   ipcMain.on("set-theme", (e, isDarkMode: boolean) => {
-    if(win instanceof BrowserWindowCustom) {
-      setVibrancy(win, generateVibrancy(isDarkMode));
+    if(isVibrancySupported()) {
+      require("electron-acrylic-window")["setVibrancy"](win, generateVibrancy(isDarkMode));
+    } else {
+      win.setVibrancy(isDarkMode ? "dark" : "light");
     }
   });
 
