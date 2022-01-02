@@ -5,8 +5,6 @@ import { isPackaged } from 'electron-is-packaged';
 const isProd = process.env.NODE_ENV === "production";
 const isWindows = platform() === "win32";
 const getLegendaryBin = () => {
-
-
     const binariesPath =
         isProd && isPackaged // the path to a bundled electron app.
             ? path.join(process.resourcesPath, '/bin', platform())
