@@ -7,7 +7,7 @@
   "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "nextron",
-    "build": "nextron build --linux",
+    "build": "nextron build",
     "release": "nextron build --publish always",
     "postinstall": "electron-builder install-app-deps"
   },
