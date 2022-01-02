@@ -42,7 +42,7 @@
     "@types/react-redux": "^7.1.21",
     "@types/react-virtualized": "^9.21.16",
     "electron": "^15.0.0",
-    "electron-builder": "^22.11.7",
+    "electron-builder": "^22.14.5",
     "next": "^11.1.2",
     "nextron": "^7.1.0",
     "react": "^17.0.2",
