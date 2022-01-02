@@ -2,6 +2,7 @@ import { Card, Container, Grid, List, ListItem, ListItemText, ListSubheader, Swi
 import { useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "renderer/redux/hooks";
 import { setTheme } from "renderer/redux/theme";
+import UpdaterCard from "@components/auto-updater/UpdaterCard";
 
 const SettingsPage = () => {
     const dispatch = useAppDispatch();
@@ -57,6 +58,9 @@ const SettingsPage = () => {
                         </Card>
                     </Grid>
                 ))}
+                <Grid item xs={12}>
+                    <UpdaterCard />
+                </Grid>
             </Grid>
         </Container>
     );
