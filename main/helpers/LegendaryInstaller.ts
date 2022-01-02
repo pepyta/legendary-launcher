@@ -86,7 +86,6 @@ export class LegendaryInstaller {
             // The destination stream is ended by the time it's called
             file.on('finish', () => {
                 LegendaryInstaller.log(`Download finished! (path: ${path})`);
-                this.fixPermission();
                 resolve(null);
             });
 
@@ -132,7 +131,6 @@ export class LegendaryInstaller {
                 }))
                 .on("close", () => {
                     LegendaryInstaller.log(`Unzipping finished!`);
-                    this.fixPermission();
                     fs.unlinkSync(this.getDownloadPath());
                     resolve(null);
                 })
@@ -151,6 +149,7 @@ export class LegendaryInstaller {
     private async install() {
         await this.download();
         if (this.link.unzip) await this.unzip();
+        this.fixPermission();
         return;
     }
 }
