@@ -66,6 +66,15 @@ class AutoUpdater {
                 })
             )
         );
+
+        this.onUpdateDownloaded((info) =>
+            store.dispatch(
+                AutoUpdaterActions.setState({
+                    state: "update-downloaded",
+                    info,
+                })
+            )
+        );
     }
 
     public checkForUpdatesAndNotify() {
