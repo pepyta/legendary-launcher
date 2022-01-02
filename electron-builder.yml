@@ -11,18 +11,18 @@ files:
       - app
 win:
   asarUnpack:
-    - resources/bin/win32/legendary.exe
+    - bin/win32/legendary.exe
   files:
     - resources/bin/win32/*
 linux:
   target: "AppImage"
   asarUnpack:
-    - resources/bin/linux/legendary
+    - bin/linux/legendary
   files:
     - resources/bin/linux/*
 mac:
   asarUnpack:
-    - resources/bin/darwin/legendary
+    - bin/darwin/legendary
   files:
     - resources/bin/darwin/*
 publish:
