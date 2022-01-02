@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import AppBar from '@components/misc/AppBar';
-import { Box, Card, CardContent, Container, Grid, Paper, Typography, useTheme } from '@mui/material';
+import { Box, Card, CardContent, Container, Grid, Paper, Tooltip, Typography, useTheme } from '@mui/material';
 import { useUser } from '@components/providers/UserProvider';
 import { useAppSelector } from 'renderer/redux/hooks';
 import Image from '@components/misc/Image';
@@ -30,11 +30,13 @@ const HomePage = () => {
                                 </Typography>
                                 <Grid container spacing={1}>
                                     {games?.filter((el) => !!el.installation).map((el) => (
-                                        <Grid item xs={2} key={`quick-launch-${el.overview.app_name}`}>
-                                            <GameIcon
-                                                game={el}
-                                            />
+                                            <Tooltip title={el.overview.app_title} key={`quick-launch-${el.overview.app_name}`}>
+                                        <Grid item xs={2}>
+                                                <GameIcon
+                                                    game={el}
+                                                />
                                         </Grid>
+                                            </Tooltip>
                                     ))}
                                 </Grid>
                             </CardContent>
